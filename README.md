@@ -7,35 +7,64 @@ Create a microservice to strore and throw errorDetails in HttpServletRequest Att
 ### Curl Commands
 
 ```
-curl --location --request POST 'http://localhost:8080/validateFirstScreen' \
---header 'Content-Type: application/json' \
---header 'flag: true' \
---header 'Cookie: JSESSIONID=5465B0BB022F81E4DAAADA5599DD0589' \
---data-raw ''
+curl --location --request POST 'http://localhost:8080/validateTicket' \
+--header 'ticketNumber: ABC345' \
+--data ''
 ```
-<I>Success Response</I>
-```json
-{
-  "message": "SUCCESS"
-}
+<u>Success Response</u>
+```
+Ticket Number Validation Successful : ABC345
 ```
 
 </details>
 
-<I>Error Response</I>
+<u>Error Response</u>
+1. Missing ticket number
 ```json
 {
-    "multipleErrors": [
+  "errors": [
+    {
+      "errorCode": "101",
+      "errorMessage": "Ticket number is missing"
+    }
+  ]
+}
+```
+2. Invalid ticket number : ABC345645678
+```json
+{
+  "errors": [
+    {
+      "errorCode": "102",
+      "errorMessage": "Invalid Ticket Number : Size must be less than 9"
+    }
+  ]
+}
+```
+3. Invalid ticket number : 3456
+```json
+{
+    "errors": [
         {
-            "errorCode": "101",
-            "errorMessage": "First Screen Error Message for First Validation Check"
-        },
-        {
-            "errorCode": "102",
-            "errorMessage": "First Screen Error Message for Second Validation Check"
+            "errorCode": "103",
+            "errorMessage": "Invalid Ticket Number : Must start with ABC"
         }
     ]
 }
 ```
-
+4. Invalid ticket number : 345645678234
+```json
+{
+  "errors": [
+    {
+      "errorCode": "102",
+      "errorMessage": "Invalid Ticket Number : Size must be less than 9"
+    },
+    {
+      "errorCode": "103",
+      "errorMessage": "Invalid Ticket Number : Must start with ABC"
+    }
+  ]
+}
+```
 </details>
